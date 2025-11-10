@@ -2,68 +2,80 @@
 ===========================================
 📂 File Processing Simulation with Exceptions
 ===========================================
-
-🎯 Objective:
-This activity will help students:
-
-- Identify and explain JavaScript's standard exceptions through practical examples
-- Implement `finally` blocks to manage resources and ensure consistent cleanup
-
----
-📘 Scenario:
-You’ve been hired to create a system that simulates file processing for a virtual library.
-
-The system must:
-- Validate user input (file names and data)
-- Simulate file reading/writing operations
-- Ensure all resources (e.g., file handles) are closed, even if errors occur
-
----
-🧭 Instructions:
-
-Step 1: Debug Standard Exceptions  
-- Run the starter code and identify the standard exceptions being thrown  
-- Correct the issues and observe output
-
-Step 2: Add Input Validation and Custom Exceptions  
-- Validate:
-  • Missing file names 
-  • Non-string file data  
-  • Empty string data 
-
-Step 3: Implement a `finally` Block  
-- Simulate releasing resources, regardless of whether an error occurred
-
-Step 4: Test Your Solution  
-- Use a variety of inputs to confirm the `finally` block always executes
 */
 
 // ============================================
-// 🛠️ Starter Code: processFile Function
+// Step 1: Debug Standard Exceptions
+// ============================================
+// JavaScript standard exceptions include:
+// - ReferenceError: variable not defined
+// - TypeError: wrong data type
+// - SyntaxError: invalid JS syntax
+// - RangeError: number out of range
+// We'll demonstrate them by validating input.
+
+// ============================================
+// Step 2 & 3: Add Input Validation, Custom Exceptions & finally Block
 // ============================================
 
 function processFile(fileName, fileData) {
+  let fileHandle = null; // simulate a file handle
+
   try {
-    // TODO: Add input validation here
+    // --- Step 2: Input Validation ---
     
-    // TODO: Implement simulated file processing here
+    // Check for missing file name
+    if (!fileName) {
+      throw new ReferenceError("File name is missing!");
+    }
+
+    // Check that fileData is a string
+    if (typeof fileData !== "string") {
+      throw new TypeError("File data must be a string!");
+    }
+
+    // Check for empty string data
+    if (fileData.trim() === "") {
+      throw new Error("File data cannot be empty!");
+    }
+
+    // --- Step 2: Simulated File Processing ---
+    fileHandle = `Handle-${fileName}`; // simulate opening a file
+    console.log(`File "${fileName}" opened successfully.`);
+
     console.log(`Processing file: ${fileName}`);
-    console.log(`File content: ${fileData}`);
-    
-    // TODO: Add simulated file operations (reading/writing)
-    
+    console.log(`File content: ${fileData.toUpperCase()}`); // example processing
+
+    console.log(`File "${fileName}" processed and saved successfully.`);
+
   } catch (err) {
-    // TODO: Implement error handling
-    console.error(err);
+    // --- Step 2: Error Handling ---
+    console.error("Error:", err.message);
+
+  } finally {
+    // --- Step 3: finally block for resource cleanup ---
+    if (fileHandle) {
+      console.log(`Closing file handle for "${fileName}"`);
+      fileHandle = null; // simulate releasing the resource
+    } else {
+      console.log("No file handle to close.");
+    }
+    console.log("Finally block executed ✅\n");
   }
-  // TODO: Implement a finally block to close resources
 }
 
 // ============================================
-// 🧪 Test Cases Below
+// Step 4: Test Your Solution
 // ============================================
 
+console.log("=== Test 1: Missing file name ===");
 processFile(); // ❌ ReferenceError: File name is missing
+
+console.log("=== Test 2: File data not a string ===");
 processFile("myFile.txt", 42); // ❌ TypeError: File data must be a string
+
+console.log("=== Test 3: Empty file data ===");
 processFile("myFile.txt", ""); // ❌ Error: File data cannot be empty
+
+console.log("=== Test 4: Valid file data ===");
 processFile("myFile.txt", "Hello, world!"); // ✅ Should process successfully
